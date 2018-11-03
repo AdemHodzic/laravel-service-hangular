@@ -11,7 +11,8 @@
 |
 */
 
-Route::resource('/users', 'UsersController');
+Route::resource('/users', 'UsersController')->middleware('cors');
+Route::post('/users/login', 'UsersController@login')->middleware('cors');
 Route::get('/', function () {
     return view('welcome');
 });

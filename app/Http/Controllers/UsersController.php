@@ -14,23 +14,14 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'username'=>'required|unique:users'
         ]);
 
-        $user = new User;
-        $user->username = $request->username;
-        $user->password = $request->password;
-        $user->save();
+        $user = User::create(compact($validated));
         return $user;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function show(int $id)
     {
         $user = User::find($id);
@@ -53,5 +44,12 @@ class UsersController extends Controller
         $user = User::find($id);
         $user->delete();
         return response()->json(null, 204);        
+    }
+
+    public function login(Request $request) {
+        return User::where([
+            'username' => $request->username,
+            'password' => $request->password,
+        ])->get()->first();
     }
 }
